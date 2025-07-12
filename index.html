@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loan Repayment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #222;
+    }
+
+    input[type="number"] {
+      padding: 12px;
+      width: 250px;
+      font-size: 18px;
+      margin-top: 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .app-buttons {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 20px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 240px;
+      cursor: pointer;
+      font-size: 18px;
+      text-decoration: none;
+      color: #000;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #e6f0ff;
+    }
+
+    .btn img {
+      width: 28px;
+      height: 28px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Loan Repayment</h1>
+  <p>Enter the loan amount to repay:</p>
+
+  <input type="number" id="amount" placeholder="Enter amount" />
+
+  <div class="app-buttons">
+    <a class="btn" onclick="pay('paytm')">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Paytm_logo.png" alt="Paytm">
+      Pay with Paytm
+    </a>
+    <a class="btn" onclick="pay('gpay')">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Google_Pay_Logo.svg" alt="GPay">
+      Pay with Google Pay
+    </a>
+    <a class="btn" onclick="pay('phonepe')">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f0/PhonePe_Logo.svg" alt="PhonePe">
+      Pay with PhonePe
+    </a>
+    <a class="btn" onclick="pay('upi')">
+      <img src="https://seeklogo.com/images/U/upi-logo-09463D51C7-seeklogo.com.png" alt="UPI">
+      Other UPI Apps
+    </a>
+  </div>
+
+  <script>
+    function pay(app) {
+      const amount = document.getElementById('amount').value;
+      const upiID = 'loanrecoverydprtmnt-1@okhdfcbank';
+      const payeeName = 'Loan Repayment';
+      const txnNote = 'Loan Payment';
+
+      if (!amount || isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid amount.');
+        return;
+      }
+
+      let upiLink = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(txnNote)}`;
+
+      switch (app) {
+        case 'paytm':
+          upiLink = `paytmmp://pay?url=${encodeURIComponent(upiLink)}`;
+          break;
+        case 'gpay':
+          upiLink = `tez://upi/pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(txnNote)}`;
+          break;
+        case 'phonepe':
+          upiLink = `phonepe://upi/pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(txnNote)}`;
+          break;
+        default:
+          // for other UPI apps
+          break;
+      }
+
+      window.location.href = upiLink;
+    }
+  </script>
+
+</body>
+</html>
